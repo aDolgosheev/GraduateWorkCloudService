@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.netology.cloudservice.service.AuthorizationService;
+import ru.dolgosheev.cloudservice.service.AuthorizationService;
 
 @RestController
 @RequestMapping("/logout")
