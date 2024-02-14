@@ -22,6 +22,7 @@ public class FileService {
 
     public synchronized void addFile(String filename, byte[] file) {
         fileRepository.save(new FileEntity(filename, file));
+        logger.info("File " + filename + " was added");
     }
 
     public synchronized void deleteFile(String filename) {
@@ -35,6 +36,7 @@ public class FileService {
 
     public byte[] getFile(String filename) {
         final FileEntity file = getFileByName(filename);
+        logger.info("File " + filename + " was received");
         return file.getFileContent();
     }
 
@@ -43,6 +45,7 @@ public class FileService {
         final FileEntity newFileEntity = new FileEntity(newFilename, fileEntity.getFileContent());
         fileRepository.delete(fileEntity);
         fileRepository.save(newFileEntity);
+        logger.info("File " + oldFilename + " was renamed to " + newFilename);
     }
 
     public List<FileDescriptionInResponse> getFileList(int limit) {
