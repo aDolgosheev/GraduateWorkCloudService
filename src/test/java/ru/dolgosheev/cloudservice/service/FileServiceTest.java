@@ -70,7 +70,7 @@ class FileServiceTest {
     @Test
     void getFileList() {
         final List<FileDescriptionInResponse> expectedFileList = List.of(new FileDescriptionInResponse(EXISTING_FILE, 3));
-        final List<FileDescriptionInResponse> fileList = fileService.getFileList(1);
+        final List<FileEntity> fileList = fileService.getFileList(1);
         Assertions.assertEquals(expectedFileList, fileList);
     }
 }

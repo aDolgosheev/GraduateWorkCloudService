@@ -48,11 +48,16 @@ public class FileService {
         logger.info("File " + oldFilename + " was renamed to " + newFilename);
     }
 
-    public List<FileDescriptionInResponse> getFileList(int limit) {
-        final List<FileEntity> files = fileRepository.getFiles(limit);
-        return files.stream()
-                .map(file -> new FileDescriptionInResponse(file.getFileName(), file.getFileContent().length))
-                .collect(Collectors.toList());
+//    public List<FileDescriptionInResponse> getFileList(int limit) {
+//        final List<FileEntity> files = fileRepository.getFiles(limit);
+//        return files.stream()
+//                .map(file -> new FileDescriptionInResponse(file.getFileName(), file.getFileContent().length))
+//                .collect(Collectors.toList());
+////        return fileRepository.getFiles(limit);
+//    }
+
+    public List<FileEntity> getFileList(int limit) {
+        return fileRepository.getFiles(limit);
     }
 
     private FileEntity getFileByName(String filename) {

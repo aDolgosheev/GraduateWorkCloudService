@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dolgosheev.cloudservice.dto.FileDescriptionInResponse;
+import ru.dolgosheev.cloudservice.entities.FileEntity;
 import ru.dolgosheev.cloudservice.service.AuthorizationService;
 import ru.dolgosheev.cloudservice.service.FileService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/list")
@@ -29,6 +31,8 @@ public class FileListController {
     public List<FileDescriptionInResponse> getFileList(@RequestHeader("auth-token")
                                                            @NotBlank String authToken, @Min(1) int limit) {
         authorizationService.checkToken(authToken);
-        return fileService.getFileList(limit);
+        return fileService.getFileList(limit).stream()
+                .map(file -> new FileDescriptionInResponse(file.getFileName(), file.getFileContent().length))
+                .collect(Collectors.toList());
     }
 }
