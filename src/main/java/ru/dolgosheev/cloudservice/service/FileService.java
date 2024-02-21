@@ -3,6 +3,7 @@ package ru.dolgosheev.cloudservice.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.dolgosheev.cloudservice.dto.FileDescriptionInResponse;
 import ru.dolgosheev.cloudservice.entities.FileEntity;
 import ru.dolgosheev.cloudservice.repository.FileRepository;
@@ -10,6 +11,7 @@ import ru.dolgosheev.cloudservice.repository.FileRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @Service
 public class FileService {
     private final Logger logger = LoggerFactory.getLogger(FileService.class);
@@ -20,11 +22,13 @@ public class FileService {
         this.fileRepository = fileRepository;
     }
 
+    @Transactional
     public synchronized void addFile(String filename, byte[] file) {
         fileRepository.save(new FileEntity(filename, file));
         logger.info("File " + filename + " was added");
     }
 
+    @Transactional
     public synchronized void deleteFile(String filename) {
         if (!fileRepository.existsById(filename)) {
             logger.error("File " + filename + " not found");
@@ -40,6 +44,7 @@ public class FileService {
         return file.getFileContent();
     }
 
+    @Transactional
     public synchronized void editFileName(String oldFilename, String newFilename) {
         final FileEntity fileEntity = getFileByName(oldFilename);
         final FileEntity newFileEntity = new FileEntity(newFilename, fileEntity.getFileContent());
@@ -47,14 +52,6 @@ public class FileService {
         fileRepository.save(newFileEntity);
         logger.info("File " + oldFilename + " was renamed to " + newFilename);
     }
-
-//    public List<FileDescriptionInResponse> getFileList(int limit) {
-//        final List<FileEntity> files = fileRepository.getFiles(limit);
-//        return files.stream()
-//                .map(file -> new FileDescriptionInResponse(file.getFileName(), file.getFileContent().length))
-//                .collect(Collectors.toList());
-////        return fileRepository.getFiles(limit);
-//    }
 
     public List<FileEntity> getFileList(int limit) {
         return fileRepository.getFiles(limit);
